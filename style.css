@@ -1,0 +1,25 @@
+:root {
+    background: #140f00;
+    color: #fef9ec;
+}
+
+body {
+    background: #140f00;
+    color: #fef9ec;
+}
+
+#guess-button {
+    color: #fef9ec;
+    background: #ff8400;
+    border-color: #ff8400;
+}
+
+#letter-input {
+    color: #fef9ec;
+    background: #291f00;
+    border-color: #ff8400;
+}
+
+#letter-input::placeholder {
+    color: #fef9ec;
+}

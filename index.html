@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hangman Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container" style="padding-top: 5rem;">
+    <h1 class="text-center">Hangman Game</h1>
+    <div class="text-center">
+        <div id="question-div" class="mb-4">
+            <span id="question"></span>
+        </div>
+        <div id="word-to-guess" class="mb-4"></div>
+        <div id="attempts" class="mb-4">
+            Attempts Left: <span id="attempts-left">6</span>
+        </div>
+        <div class="mb-4">
+            <input type="text" id="letter-input" class="form-control" placeholder="Enter a letter">
+        </div>
+        <button id="guess-button" class="btn btn-primary">Guess</button>
+        <div id="guessed-letters" class="mt-4">Guessed Letters: <span id="letters-display"></span></div>
+    </div>
+</div>
+
+<script>
+    // Define an array of words to guess
+    const words = ['hangman', 'javascript', 'bootstrap', 'developer', 'coding'];
+    const answers = [
+        'paginatedlistcs',
+        'paginacion',
+        'haspreviousage',
+        'totalpages',
+        'iquerytable',
+        'ienumerablestudent',
+        'almacenar',
+        'pagesize',
+        'countagesize',
+        'paginacionbusquedaordenacion',
+        'pagesize',
+        'sortordercurrentfilter',
+        'sortorderpageindexcurrentfilter',
+        'currentfilter',
+        'haspreviouspage',
+    ]
+    const questions = [
+        '¿En qué archivo del proyecto se crea la clase "PaginatedList"? (incluye la extension del archivo sin punto)', 
+        '¿Cuál es el propósito de la clase "PaginatedList"?', 
+        '¿Qué propiedad de la clase "PaginatedList" indica si existe una página anterior?', 
+        '¿Dónde se almacena el número total de páginas en la clase "PaginatedList"?', 
+        '¿Qué es el propósito del método "CreateAsync" en la clase "PaginatedList"?', 
+        '¿Qué tipo de elementos se almacenan en la propiedad "Students" en la clase "IndexModel"?', 
+        '¿Cuál es el propósito de la propiedad "CurrentSort" en la clase "IndexModel"?', 
+        '¿Cómo se determina el tamaño de página en la clase "IndexModel"?', 
+        '¿Cómo se calcula el número total de páginas en la clase "IndexModel"?', 
+        '¿Cuál es el propósito del método "OnGetAsync" en la clase "IndexModel"?', 
+        '¿Dónde se almacena el valor del tamaño de página predeterminado en la clase "IndexModel"?', 
+        '¿Qué parámetros se añaden a las columnas del encabezado de la tabla en la página "Index"?', 
+        '¿Cuál es la URL generada por los enlaces de paginación en la página "Index"?', 
+        '¿Dónde se almacena el valor de la consulta de búsqueda actual en la clase "IndexModel"?', 
+        '¿Cómo se determina si existe una página anterior en la clase "IndexModel"?', 
+    ]
+
+    // Select a random question & its answer from the arrays
+    let randomNumber = Math.floor(Math.random() * 15);
+    const question = questions[randomNumber]; 
+    const answer = answers[randomNumber];
+
+
+    // Initialize game variables
+    let wordToGuess = answer;
+    let remainingAttempts = 6;
+    let guessedLetters = [];
+    let wordDisplay = '';
+
+    // Initialize the word display
+    for (let i = 0; i < wordToGuess.length; i++) {
+        wordDisplay += '_';
+    }
+    document.getElementById('word-to-guess').textContent = wordDisplay;
+    document.getElementById('question').textContent = question;
+
+    // Handle the guess button click event
+    document.getElementById('guess-button').addEventListener('click', function () {
+        const letterInput = document.getElementById('letter-input');
+        const letter = letterInput.value.toLowerCase();
+
+        if (letter.length === 1 && letter.match(/[a-z]/)) {
+            if (guessedLetters.includes(letter)) {
+                alert('You already guessed that letter!');
+            } else if (wordToGuess.includes(letter)) {
+                // Update the word display
+                for (let i = 0; i < wordToGuess.length; i++) {
+                    if (wordToGuess[i] === letter) {
+                        wordDisplay = replaceAt(wordDisplay, i, letter);
+                    }
+                }
+                document.getElementById('word-to-guess').textContent = wordDisplay;
+
+                // Check if the player has won
+                if (!wordDisplay.includes('_')) {
+                    alert('Congratulations! You won!');
+                }
+            } else {
+                remainingAttempts--;
+                document.getElementById('attempts-left').textContent = remainingAttempts;
+
+                if (remainingAttempts === 0) {
+                    alert('Game over! The word was: ' + wordToGuess);
+                }
+            }
+
+            if (guessedLetters.includes(letter) != true) {
+                guessedLetters.push(letter);
+            }
+            document.getElementById('letters-display').textContent = guessedLetters.join(', ');
+
+            // Reset input after inserted a letter
+            letterInput.value = '';
+        } else {
+            alert('Please enter a single letter.');
+        }
+    });
+
+    // Helper function to replace a character at a specific index in a string
+    function replaceAt(str, index, character) {
+        return str.substring(0, index) + character + str.substring(index + 1);
+    }
+</script>
+
+</body>
+</html>
